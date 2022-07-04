@@ -9,6 +9,8 @@ import numpy as np
 # Visualization imports
 import matplotlib.pyplot as plt
 import seaborn as sns
+import plotly.graph_objects as go
+import plotly
 import plotly.express as px
 import streamlit as st
 
@@ -27,7 +29,7 @@ from datetime import datetime
 st.set_page_config('wide')
 header = st.container()
 ttm, current_month, ytd = st.columns(3)
-# dataset = st.read_csv('transactions.csv')
+# dataset = st.read_csv('transactions1.csv')
 
 with header:
     st.title('My Personal Financial Dashboard')
@@ -35,22 +37,27 @@ with header:
 
 with ttm:
     ttm.header('TTM Income')
-    ttm.text('(trailing twelve months)')
+    ttm.text('(trailing twelve months income)')
     ttm.header('TTM Expenses')
+    ttm.text('(trailing twelve months expenses)')
 
 
 with current_month:
-    current_month.header('Current Month Revenue')
-    current_month.header('Type of Revenue')
+    current_month.header('Current Month Balance')
+    income.loc['Jan, 2018':'Jun, 2022'].groupby('month', sort=False).amount.sum().plot(kind='bar',
+                                                             figsize=(14, 7),
+                                                             legend=True,
+                                                             rot=65)
+    current_month.header('Net income')
     current_month.header('Top 5 expenses in selected period')
 
 
 with ytd:
-    ytd.header('Month Balance')
-    ytd.header('Net Income')
+    ytd.header('Types of Revenue')
     ytd.header('Income vs Expense')
-    ytd.text('Year to date total income')
-    ytd.text('Year to date total expenses')
+
+    ytd.markdown('* **Year to date total income**')
+    ytd.markdown('* **Year to date total expenses**')
 
     
 # /Users/arsen/codeup-data-science/personal_project/my_perso_awsm_dashboard.py

@@ -11,6 +11,6 @@ def get_local_transactions():
     This function checks the local repositary for a CSV
     file and writes it into a df
     '''
-    if os.path.exists('transactions.csv'):
-        return pd.read_csv('transactions.csv')
+    if os.path.exists('transactions1.csv'):
+        return pd.read_csv('transactions1.csv')
 
