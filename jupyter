@@ -1,0 +1,25 @@
+# Ignoring warning messages from python
+import warnings
+warnings.filterwarnings('ignore')
+
+# General use imports
+import pandas as pd
+import numpy as np
+import streamlit as st
+
+# Visualization imports
+import matplotlib.pyplot as plt
+import seaborn as sns
+import plotly.express as px
+
+# Modules and data
+import requests
+import acquire
+import prep
+from datetime import datetime
+
+# Page setting
+st.set_page_config('wide')
+with open('style.css') as f:
+    st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+header = st.beta_container()
