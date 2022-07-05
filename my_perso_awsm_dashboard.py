@@ -29,7 +29,9 @@ from datetime import datetime
 st.set_page_config('wide')
 header = st.container()
 ttm, current_month, ytd = st.columns(3)
-# dataset = st.read_csv('transactions1.csv')
+transactions = pd.read_csv('transactions.csv')
+income = pd.read_csv('income.csv')
+expenses = pd.read_csv('expenses.csv')
 
 with header:
     st.title('My Personal Financial Dashboard')
@@ -44,10 +46,13 @@ with ttm:
 
 with current_month:
     current_month.header('Current Month Balance')
-    income.loc['Jan, 2018':'Jun, 2022'].groupby('month', sort=False).amount.sum().plot(kind='bar',
-                                                             figsize=(14, 7),
-                                                             legend=True,
-                                                             rot=65)
+    # income_ytd = income.loc['Jan, 2022':'Jun, 2022'].groupby('month', sort=False).amount.sum()
+    value_count = pd.DataFrame(income['amount'].value_counts()).head(10)
+    st.bar_chart(value_count)
+    # dataset2.loc['Jan, 2021':'Jun, 2022'].groupby('month', sort=False).amount.sum().plot(kind='bar',
+    #                                                          figsize=(14, 7),
+    #                                                          legend=True,
+    #                                                          rot=65)
     current_month.header('Net income')
     current_month.header('Top 5 expenses in selected period')
 
