@@ -19,6 +19,7 @@ import requests
 import acquire
 import prep
 from datetime import datetime
+import altair as alt
 
 # # Page setting
 # with open('style.css') as f:
@@ -40,8 +41,15 @@ with header:
 with ttm:
     ttm.header('TTM Income')
     ttm.text('(trailing twelve months income)')
+    ttmi_graph =  pd.DataFrame(income.loc['Jun, 2021':'May, 2022'].groupby('months', sort=False).amount.sum())
+    # st.bar_chart(ttmi_graph)
+    fig = px.bar(ttmi_graph, x="category", y="amount", title="Year to date expenses", color="category")
+    fig.show()
+    st.write(fig)
     ttm.header('TTM Expenses')
     ttm.text('(trailing twelve months expenses)')
+    ttme_graph =  pd.DataFrame(expenses.loc['Jun, 2021':'May, 2022'].groupby('months', sort=False).amount.sum())
+    st.bar_chart(ttme_graph)
 
 
 with current_month:
@@ -59,10 +67,24 @@ with current_month:
 
 with ytd:
     ytd.header('Types of Revenue')
+    # revenue_type = income.loc['2022'].groupby('category', sort=False).amount.sum()
+    fig = px.pie(income, values='amount', names='category')
+    fig.show()
+    st.write(fig)
+
     ytd.header('Income vs Expense')
 
     ytd.markdown('* **Year to date total income**')
+    ytd_income = pd.DataFrame(income.groupby('category', sort=False).amount.sum().sort_values(ascending=False))
+    ytd_income1 = ytd_income.reset_index()
+    fig = px.bar(ytd_income1, x="category", y="amount", title="Year to date income", color="category")
+    fig.show()
+    st.write(fig)
     ytd.markdown('* **Year to date total expenses**')
-
+    ytd_expenses = pd.DataFrame(expenses.groupby('category', sort=False).amount.sum().sort_values(ascending=False))
+    ytd_expenses1 = ytd_expenses.reset_index()
+    fig = px.bar(ytd_expenses1, x="category", y="amount", title="Year to date expenses", color="category")
+    fig.show()
+    st.write(fig)
     
 # /Users/arsen/codeup-data-science/personal_project/my_perso_awsm_dashboard.py
