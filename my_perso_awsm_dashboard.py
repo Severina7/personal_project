@@ -21,19 +21,22 @@ import prep
 from datetime import datetime
 import altair as alt
 
+# def page_load_config():
+#     st.set_page_config(layout="wide")
 # # Page setting
 # with open('style.css') as f:
 #     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 # Streamlit page organizer and display
 
-st.set_page_config('wide')
+st.set_page_config(layout='wide')
 header = st.container()
 ttm, current_month, ytd = st.columns(3)
 transactions = pd.read_csv('transactions.csv')
 income = pd.read_csv('income.csv')
+income_june = pd.read_csv('income_june.csv')
 expenses = pd.read_csv('expenses.csv')
-
+expenses_categories = pd.read_csv('expenses_categories.csv')
 with header:
     st.title('My Personal Financial Dashboard')
 
@@ -53,38 +56,34 @@ with ttm:
 
 
 with current_month:
-    current_month.header('Current Month Balance')
-    # income_ytd = income.loc['Jan, 2022':'Jun, 2022'].groupby('month', sort=False).amount.sum()
-    value_count = pd.DataFrame(income['amount'].value_counts()).head(10)
-    st.bar_chart(value_count)
-    # dataset2.loc['Jan, 2021':'Jun, 2022'].groupby('month', sort=False).amount.sum().plot(kind='bar',
-    #                                                          figsize=(14, 7),
-    #                                                          legend=True,
-    #                                                          rot=65)
+    current_month.header('Current Month Income')
+    st.metric(label= 'Total Income June', value='5116.69', delta='387.33', delta_color='normal')
+    current_month.header('Top 7 June expenses by category')
+    fig = px.bar(expenses_categories[1:7], x='category', y='amount', color="category")
+    fig.update_layout(width=400,height=400)
+    st.write(fig, width=400,height=400)
     current_month.header('Net income')
-    current_month.header('Top 5 expenses in selected period')
 
 
 with ytd:
     ytd.header('Types of Revenue')
-    # revenue_type = income.loc['2022'].groupby('category', sort=False).amount.sum()
     fig = px.pie(income, values='amount', names='category')
-    fig.show()
-    st.write(fig)
+    fig.update_layout(width=400,height=400)
+    st.write(fig, width=400,height=400)
 
     ytd.header('Income vs Expense')
 
     ytd.markdown('* **Year to date total income**')
     ytd_income = pd.DataFrame(income.groupby('category', sort=False).amount.sum().sort_values(ascending=False))
     ytd_income1 = ytd_income.reset_index()
-    fig = px.bar(ytd_income1, x="category", y="amount", title="Year to date income", color="category")
-    fig.show()
-    st.write(fig)
+    fig = px.bar(ytd_income1, x="category", y="amount", color="category")
+    fig.update_layout(width=400,height=400)
+    st.write(fig, width=400,height=400)
     ytd.markdown('* **Year to date total expenses**')
     ytd_expenses = pd.DataFrame(expenses.groupby('category', sort=False).amount.sum().sort_values(ascending=False))
     ytd_expenses1 = ytd_expenses.reset_index()
-    fig = px.bar(ytd_expenses1, x="category", y="amount", title="Year to date expenses", color="category")
-    fig.show()
-    st.write(fig)
+    fig = px.bar(ytd_expenses1[:7], x="category", y="amount", color="category")
+    fig.update_layout(width=600,height=400)
+    st.write(fig, width=600,height=400)
     
 # /Users/arsen/codeup-data-science/personal_project/my_perso_awsm_dashboard.py
