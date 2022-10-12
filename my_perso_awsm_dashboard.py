@@ -47,21 +47,24 @@ with ttm:
     ttm.header('* TTM Income')
     ttm.text('(TTM = trailing twelve months)')
     fig = px.bar(ttmi_graph, x='months', y='amount', title='TTM Income', color='months', text_auto=True)
-    fig.update_layout(width=500,height=400, showlegend=False)    
+    fig.update_layout(width=400,height=400, showlegend=False)    
     st.write(fig)
+
     ttm.header('* TTM Expenses')
     fig = px.bar(round(ttme_graph[1:8], 2), x='category', y='amount', title='TTM Expenses', color='category', text_auto=True)
-    fig.update_layout(width=500,height=400, showlegend=False)   
-    st.write(fig, '* TTM expenses table', round(ttme_graph[1:], 2), width=500,height=400, use_container_width=True)
+    fig.update_layout(width=400,height=400, showlegend=False)   
+    st.write(fig, '* TTM expenses table', round(ttme_graph[1:], 2), use_container_width=True)
 
 
 with current_month:
     current_month.header('Current Month Income')
     st.metric(label= 'Total Income June', value='$5116.69', delta='$387.33', delta_color='normal')
+
     current_month.header('Top 7 June expenses by category')
     fig = px.bar(expenses_categories[1:8], x='category', y='amount', color="category", text_auto=True)
-    fig.update_layout(width=500,height=400, showlegend=False)
-    st.write(fig, width=500,height=400, use_container_width=True)
+    fig.update_layout(width=400,height=400, showlegend=False)
+    st.write(fig, use_container_width=True)
+
     current_month.header('Net income')
     net_income = (income_june).sum() - (expenses_categories_june.amount[1:]).sum()
     st.metric(label= 'Net Income June', value='806.17', delta=None, delta_color='normal')
@@ -73,19 +76,20 @@ with ytd:
     fig = px.pie(income, values='amount', names='category')
     fig.update_layout(width=400,height=300)
     st.write(fig, width=400,height=300)
-    ytd.header('Income vs Expense')
 
+    ytd.header('Income vs Expense')
     ytd.markdown('* **Year to date total income**')
     ytd_income = pd.DataFrame(income.groupby('category', sort=False).amount.sum().sort_values(ascending=False))
     ytd_income1 = ytd_income.reset_index()
     fig = px.bar(ytd_income1, x="category", y="amount", color="category")
     fig.update_layout(width=400,height=400)
     st.write(fig, width=400,height=400)
+
     ytd.markdown('* **Year to date total expenses**')
     ytd_expenses = pd.DataFrame(expenses.groupby('category', sort=False).amount.sum().sort_values(ascending=False))
     ytd_expenses1 = ytd_expenses.reset_index()
     fig = px.bar(ytd_expenses1[1:8], x="category", y="amount", color="category")
-    fig.update_layout(width=600,height=400)
-    st.write(fig, width=600,height=400)
+    fig.update_layout(width=400,height=400)
+    st.write(fig, width=400,height=400)
     
 # /Users/arsen/codeup-data-science/personal_project/my_perso_awsm_dashboard.py
